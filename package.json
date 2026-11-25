@@ -15,7 +15,8 @@
     "secret:webhook": "wrangler secret put WEBHOOK_SECRET",
     "qa:import": "python3 -I scripts/import_qa.py QA-km-en.xlsx seed/qa.sql",
     "qa:seed:local": "wrangler d1 execute DB --local --file seed/qa.sql",
-    "qa:seed:remote": "wrangler d1 execute DB --remote --file seed/qa.sql"
+    "qa:seed:remote": "wrangler d1 execute DB --remote --file seed/qa.sql",
+    "media:upload": "node scripts/upload_media.mjs"
   },
   "dependencies": {
     "@google/genai": "^1.30.0",

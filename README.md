@@ -29,6 +29,10 @@ Load / update the Q&A bank:
 2. `npm run db:local` / `npm run db:remote` — creates the `kb_qa` table (once)
 3. `npm run qa:seed:local` / `npm run qa:seed:remote` — replaces all Q&A rows. The bot picks up changes within 10 minutes.
 
+**Training files (PDFs, videos):** answers that name a file such as `02_KHANA_Pluslife_Procedure.pdf` get a link to it. Put the files in `media/` (git-ignored), then:
+1. `npm run media:upload` — uploads `media/` to the R2 bucket `lab-training-files`; the Worker serves them at `/files/<name>`
+2. `npm run qa:import` then `npm run qa:seed:remote` — file names become links; names of files not in `media/` are hidden
+
 **Required for groups:** by default a bot only sees `/commands` in groups. In @BotFather run `/setprivacy` → your bot → **Disable**, then remove and re-add the bot to the group (or make the bot a group admin).
 
 Questions the bot couldn't answer (or "None of these") are saved for the Q&A team:

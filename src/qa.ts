@@ -158,7 +158,7 @@ function splitAnswer(answer: string): { body: string; links: { url: string; labe
 }
 
 function linkKind(url: string): { icon: string; key: Key } {
-  if (/youtu\.?be/i.test(url)) return { icon: "🎬", key: "video" };
+  if (/youtu\.?be|\.mp4($|\?)/i.test(url)) return { icon: "🎬", key: "video" };
   if (/docs\.google|drive\.google|\.pdf($|\?)/i.test(url)) return { icon: "📄", key: "doc" };
   return { icon: "🔗", key: "link" };
 }

@@ -284,10 +284,46 @@ function makeBot(env: Env) {
   return bot;
 }
 
+/**
+ * A training file from R2, linked from Q&A answers. Supports Range requests,
+ * which phone browsers need to play and seek the video.
+ */
+async function serveFile(request: Request, env: Env, rawName: string): Promise<Response> {
+  const name = decodeURIComponent(rawName);
+  if (!env.FILES || !/^[\w.-]+$/.test(name) || (request.method !== "GET" && request.method !== "HEAD")) {
+    return new Response("Not found", { status: 404 });
+  }
+  const obj = await env.FILES.get(name, { range: request.headers, onlyIf: request.headers });
+  if (!obj) return new Response("Not found", { status: 404 });
+
+  const headers = new Headers();
+  obj.writeHttpMetadata(headers);
+  headers.set("etag", obj.httpEtag);
+  headers.set("accept-ranges", "bytes");
+  headers.set("cache-control", "public, max-age=86400");
+  if (!headers.has("content-disposition")) headers.set("content-disposition", `inline; filename="${name}"`);
+  // No body means an If-None-Match / If-Modified-Since precondition matched.
+  if (!("body" in obj)) return new Response(null, { status: 304, headers });
+
+  let status = 200;
+  if (obj.range && request.headers.has("range")) {
+    const r = obj.range as { offset?: number; length?: number; suffix?: number };
+    const offset = r.suffix !== undefined ? obj.size - r.suffix : r.offset ?? 0;
+    const length = r.suffix !== undefined ? r.suffix : r.length ?? obj.size - offset;
+    headers.set("content-range", `bytes ${offset}-${offset + length - 1}/${obj.size}`);
+    headers.set("content-length", String(length));
+    status = 206;
+  } else {
+    headers.set("content-length", String(obj.size));
+  }
+  return new Response(request.method === "HEAD" ? null : obj.body, { status, headers });
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     if (url.pathname === "/health") return new Response("ok");
+    if (url.pathname.startsWith("/files/")) return serveFile(request, env, url.pathname.slice("/files/".length));
     if (url.pathname !== "/telegram" || request.method !== "POST") {
       return new Response("Not found", { status: 404 });
     }

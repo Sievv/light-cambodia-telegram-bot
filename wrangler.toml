@@ -14,7 +14,8 @@ database_name = "telegram_learning_db"
 database_id = "68724040-3ff8-4f8c-8c8f-8bac4539a537"
 migrations_dir = "migrations"
 
-# Optional R2 bucket for curated PDFs and training media:
-# [[r2_buckets]]
-# binding = "FILES"
-# bucket_name = "lab-training-files"
+# Training PDFs and videos linked from Q&A answers, served at /files/<name>.
+# Upload with `npm run media:upload` (files in media/).
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "lab-training-files"

@@ -3,6 +3,8 @@ export type OptionKey = 'A' | 'B' | 'C' | 'D';
 
 export interface Env {
   DB: D1Database;
+  /** Training PDFs and videos, served at /files/<name>. */
+  FILES?: R2Bucket;
   BOT_TOKEN: string;
   GEMINI_API_KEY: string;
   ADMIN_TELEGRAM_IDS: string;
