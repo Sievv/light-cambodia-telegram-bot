@@ -1,0 +1,31 @@
+{
+  "name": "lab-telegram-gemini-d1",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "db:local": "wrangler d1 migrations apply DB --local",
+    "db:remote": "wrangler d1 migrations apply DB --remote",
+    "secret:telegram": "wrangler secret put BOT_TOKEN",
+    "secret:gemini": "wrangler secret put GEMINI_API_KEY",
+    "secret:admin": "wrangler secret put ADMIN_TELEGRAM_IDS",
+    "secret:webhook": "wrangler secret put WEBHOOK_SECRET",
+    "qa:import": "python3 -I scripts/import_qa.py QA-km-en.xlsx seed/qa.sql",
+    "qa:seed:local": "wrangler d1 execute DB --local --file seed/qa.sql",
+    "qa:seed:remote": "wrangler d1 execute DB --remote --file seed/qa.sql"
+  },
+  "dependencies": {
+    "@google/genai": "^1.30.0",
+    "grammy": "^1.36.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "wrangler": "^4.45.0"
+  },
+  "allowScripts": {
+    "workerd@1.20261104.1": true
+  }
+}

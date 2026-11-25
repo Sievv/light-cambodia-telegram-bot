@@ -1,0 +1,20 @@
+name = "telegram-learning"
+main = "src/index.ts"
+compatibility_date = "2026-11-09"
+workers_dev = true
+
+[vars]
+GEMINI_MODEL = "gemini-3.1-flash-lite"
+# Set this to a Gemini File Search store resource name if configured:
+GEMINI_FILE_SEARCH_STORE = ""
+
+[[d1_databases]]
+binding = "DB"
+database_name = "telegram_learning_db"
+database_id = "68724040-3ff8-4f8c-8c8f-8bac4539a537"
+migrations_dir = "migrations"
+
+# Optional R2 bucket for curated PDFs and training media:
+# [[r2_buckets]]
+# binding = "FILES"
+# bucket_name = "lab-training-files"
